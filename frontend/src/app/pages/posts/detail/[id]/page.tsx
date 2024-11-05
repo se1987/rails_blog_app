@@ -1,6 +1,6 @@
 import React from "react";
-import { Post as PostType } from "../../../models/types";
-import styles from "../../../styles/Post.module.css";
+import { Post as PostType } from "../../../../models/types";
+import styles from "../../../../styles/Post.module.css";
 
 type Props = {
   params: {

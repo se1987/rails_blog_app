@@ -23,7 +23,7 @@ export default async function Home() {
             {posts.map((post: Post) => (
               <div key={post.id} className={styles.postCard}>
                 <Link
-                  href={`pages/posts/${post.id}`}
+                  href={`pages/posts/detail/${post.id}`}
                   className={styles.postCardBox}
                 >
                   <h2>{post.title}</h2>
