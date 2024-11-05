@@ -15,7 +15,7 @@ export default async function Home() {
       <main>
         <div className={styles.homeContainer}>
           <h1>Rails & Next.js Blog</h1>
-          <Link href="/create-post" className={styles.createButton}>
+          <Link href="pages/posts/create-post" className={styles.createButton}>
             Create new Post
           </Link>
 
