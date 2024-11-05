@@ -1,27 +1,27 @@
 import React from "react";
-import { Post } from "../../../models/types";
+import { Post as PostType } from "../../../models/types";
 
 type Props = {
-  post: Post;
-};
-
-export async function getStaticProps({ params }: { params: { id: string } }) {
-  const res = await fetch(`http://localhost:3001/api/v1/posts/${params.id}`);
-  const post = await res.json();
-
-  console.log(post);
-
-  return {
-    props: {
-      post,
-    },
-
-    revalidate: 60,
+  params: {
+    id: string;
   };
-}
-
-const Post = (post: Props) => {
-  return <div>詳細ページです</div>;
 };
 
-export default Post;
+export default async function PostDetail({ params }: Props) {
+  const res = await fetch(`http://localhost:3001/api/v1/posts/${params.id}`, {
+    next: { revalidate: 60 },
+  });
+
+  if (!res.ok) {
+    return <div>指定された投稿は削除されています</div>;
+  }
+
+  const post: PostType = await res.json();
+
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+    </div>
+  );
+}
