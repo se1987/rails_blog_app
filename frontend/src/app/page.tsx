@@ -1,14 +1,35 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styles from "./styles/Home.module.css";
 import { Post } from "./models/types";
+import axios from "axios";
 
 export default async function Home() {
   const res = await fetch("http://localhost:3001/api/v1/posts", {
     next: { revalidate: 60 * 60 * 24 }, // ISRの代替オプション
   });
   const posts = await res.json();
+  const router = useRouter();
 
-  console.log(posts);
+  // 更新ボタンの処理
+  const handleUpdate = async (post: Post) => {
+    router.push(`/pages/posts/edit-post/${post.id}`);
+  };
+
+  // 削除ボタンの処理
+  const handleDelete = async (id: any) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/api/v1/posts/${id}`
+      );
+      router.reload();
+    } catch (err) {
+      console.error(err);
+      alert("削除に失敗しました");
+    }
+  };
 
   return (
     <div>
@@ -29,8 +50,18 @@ export default async function Home() {
                   <h2>{post.title}</h2>
                 </Link>
                 <p>{post.content}</p>
-                <button className={styles.editButton}>Edit</button>
-                <button className={styles.deleteButton}>Delete</button>
+                <button
+                  className={styles.editButton}
+                  onClick={() => handleUpdate(post)}
+                >
+                  Edit
+                </button>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => handleDelete(post.id)}
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>

@@ -15,12 +15,13 @@ const CreatePost = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/api/v1/posts", {
+      await axios.post("http://localhost:3001/api/v1/posts/", {
         title: title,
         content: content,
       });
       router.push("/");
     } catch (err) {
+      console.error("エラーが発生しました:", err);
       alert("投稿に失敗しました");
     }
   };

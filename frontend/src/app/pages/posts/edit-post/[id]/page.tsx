@@ -1,37 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
 // import { Post as PostType } from "../../../models/types";
-import styles from "../../../styles/Home.module.css";
+import styles from "../../../../styles/Home.module.css";
 import { useRouter } from "next/navigation";
 
-export async function EditPost(context: any) {
-  const id = context.params.id;
-  const res = await fetch(`http://localhost:3001/api/v1/posts/${id}`);
-  const post = await res.json();
-
-  const [title, setTitle] = useState(post.title);
-  const [content, setContent] = useState(post.content);
+const EditPost = ({ params }: { params: { id: string } }) => {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const res = await fetch(
+        `http://localhost:3001/api/v1/posts/${params.id}`
+      );
+      const post = await res.json();
+      setTitle(post.title);
+      setContent(post.content);
+    };
+    fetchPost();
+  }, [params.id]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await axios.put("http://localhost:3001/api/v1/posts", {
+      await axios.put(`http://localhost:3001/api/v1/posts`, {
         title: title,
         content: content,
       });
       router.push("/");
     } catch (err) {
+      console.error("エラーが発生しました:", err);
       alert("編集に失敗しました");
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1>ブログ新規投稿</h1>
+      <h1>ブログ編集</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <label className={styles.label}>タイトル</label>
         <input
@@ -53,9 +62,11 @@ export async function EditPost(context: any) {
           }
         />
         <button className={styles.button} type="submit">
-          Submit
+          編集
         </button>
       </form>
     </div>
   );
-}
+};
+
+export default EditPost;
