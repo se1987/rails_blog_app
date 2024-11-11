@@ -22,7 +22,7 @@ export default function HomeClient({ posts }: HomeProps) {
   const handleDelete = async (id: Post["id"]) => {
     try {
       await axios.delete(`http://localhost:3001/api/v1/posts/${id}`);
-      router.refresh(); // reload()より効率的な方法
+      router.refresh();
     } catch (err) {
       console.error(err);
       alert("削除に失敗しました");
