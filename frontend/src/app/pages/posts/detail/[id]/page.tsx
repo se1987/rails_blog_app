@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Post as PostType } from "../../../../models/types";
 import styles from "../../../../styles/Post.module.css";
 
@@ -18,11 +19,21 @@ export default async function PostDetail({ params }: Props) {
   }
 
   const post: PostType = await res.json();
+  if (!post) return <div>Loading...</div>;
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{post.title}</h1>
       <div className={styles.date}>{post.created_at}</div>
+      {post.image_url && (
+        <Image
+          src={post.image_url}
+          alt={post.title}
+          width={800} // 適切な幅を指定
+          height={600} // 適切な高さを指定
+          className={styles.image}
+        />
+      )}
       <p className={styles.content}>{post.content}</p>
     </div>
   );
