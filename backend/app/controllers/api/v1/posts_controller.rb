@@ -1,14 +1,15 @@
 class Api::V1::PostsController < ApplicationController
+  # GET一覧
   def index
     @posts = Post.all
     render json:@posts
   end
-
+  # GET詳細
   def show
     @post = Post.find(params[:id])
     render json:@post
   end
-
+  # POST新規投稿
   def create
     @post = Post.new(post_params)
     
@@ -18,7 +19,7 @@ class Api::V1::PostsController < ApplicationController
       render json: @post.errors, status: :unprocessable_entity
     end
   end
-
+  # PUT更新
   def update
     @post = Post.find(params[:id])
     if @post.update(post_params)
@@ -27,7 +28,7 @@ class Api::V1::PostsController < ApplicationController
       render json: @post.errors, status: :unprocessable_entity
     end
   end
-
+  # DELETE削除
   def destroy
     @post = Post.find(params[:id])
     @post.destroy
@@ -36,6 +37,6 @@ class Api::V1::PostsController < ApplicationController
   private
 
   def post_params
-  	params.require(:post).permit(:title, :content)
+  	params.require(:post).permit(:title, :content, :image)
   end
 end
