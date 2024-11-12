@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -18,6 +19,7 @@ const CreatePost = () => {
       await axios.post("http://localhost:3001/api/v1/posts/", {
         title: title,
         content: content,
+        image: image,
       });
       router.push("/");
     } catch (err) {
@@ -49,6 +51,17 @@ const CreatePost = () => {
             setContent(e.target.value)
           }
         />
+        <div>
+          <label>画像:</label>
+          <input
+            id="image"
+            placeholder="画像を選択してください"
+            type="file"
+            onChange={(e) =>
+              setImage(e.target.files ? e.target.files[0] : null)
+            }
+          />
+        </div>
         <button className={styles.button} type="submit">
           Submit
         </button>
