@@ -3,7 +3,6 @@
 import React from "react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
-// import { Post as PostType } from "../../../models/types";
 import styles from "../../../styles/Home.module.css";
 import { useRouter } from "next/navigation";
 
@@ -52,11 +51,12 @@ const CreatePost = () => {
           }
         />
         <div>
-          <label>画像:</label>
+          <label className={styles.label}>画像:</label>
           <input
             id="image"
             placeholder="画像を選択してください"
             type="file"
+            className={styles.input}
             onChange={(e) =>
               setImage(e.target.files ? e.target.files[0] : null)
             }
