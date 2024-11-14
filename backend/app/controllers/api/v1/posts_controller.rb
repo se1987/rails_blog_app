@@ -7,7 +7,9 @@ class Api::V1::PostsController < ApplicationController
   # GET詳細
   def show
     @post = Post.find(params[:id])
-    render json:@post
+    render json: @post.as_json.merge(
+    image_url: @post.image.attached? ? rails_blob_url(@post.image, only_path: false) : nil
+  )
   end
   # POST新規投稿
   def create
