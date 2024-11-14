@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  # Active Storage routes
+  direct :rails_blob do |blob|
+    route_for(:rails_blob, blob)
+  end
+  direct :rails_blob_proxy do |blob|
+    route_for(:rails_blob_proxy, blob)
+  end
+  direct :rails_blob_redirect do |blob|
+    route_for(:rails_blob_redirect, blob)
+  end
+  # 他のルート
   namespace :api do
     namespace :v1 do
       resources :posts, only: [:index, :show, :create, :update, :destroy]
