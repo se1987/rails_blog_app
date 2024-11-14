@@ -14,11 +14,19 @@ const CreatePost = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("post[title]", title);
+    formData.append("post[content]", content);
+    if (image) {
+      formData.append("post[image]", image);
+    }
+
     try {
-      await axios.post("http://localhost:3001/api/v1/posts/", {
-        title: title,
-        content: content,
-        image: image,
+      await axios.post("http://localhost:3001/api/v1/posts/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       router.push("/");
     } catch (err) {
