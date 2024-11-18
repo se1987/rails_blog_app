@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { ChangeEvent, FormEvent, useState } from "react";
+import Image from "next/image";
 import axios from "axios";
 import styles from "../../../../styles/Home.module.css";
 import { Post as PostType } from "../../../../models/types";
@@ -14,6 +15,8 @@ type EditPostProps = {
 const EditPost = ({ params }: EditPostProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [image, setImage] = useState<File | null>(null); // 画像ファイルを保持
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null); // 現在の画像URL
   const [id, setId] = useState<string | null>(null); // 解決済みのIDを保存
   const router = useRouter();
 
@@ -34,6 +37,7 @@ const EditPost = ({ params }: EditPostProps) => {
       const post: PostType = await res.json();
       setTitle(post.title);
       setContent(post.content);
+      setCurrentImageUrl(post.image_url || null);
     };
     fetchPost();
   }, [id]);
@@ -42,9 +46,16 @@ const EditPost = ({ params }: EditPostProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3001/api/v1/posts/${id}`, {
-        title: title,
-        content: content,
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      if (image) {
+        formData.append("image", image);
+      }
+      await axios.put(`http://localhost:3001/api/v1/posts/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // マルチパート形式で送信
+        },
       });
       router.push("/");
     } catch (err) {
@@ -68,6 +79,31 @@ const EditPost = ({ params }: EditPostProps) => {
             setTitle(e.target.value)
           }
         />
+        <label className={styles.label}>現在の画像:</label>
+        {currentImageUrl ? (
+          <div>
+            <Image
+              src={currentImageUrl}
+              alt={title}
+              width={300} // 適切な幅を指定
+              height={300} // 適切な高さを指定
+            />
+          </div>
+        ) : (
+          <p>画像は設定されていません。</p>
+        )}
+        <div>
+          <label className={styles.label}>画像を変更:</label>
+          <input
+            id="image"
+            placeholder="画像を選択してください"
+            type="file"
+            className={styles.input}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setImage(e.target.files ? e.target.files[0] : null)
+            }
+          />
+        </div>
         <label className={styles.label}>本文</label>
         <textarea
           id="content"
