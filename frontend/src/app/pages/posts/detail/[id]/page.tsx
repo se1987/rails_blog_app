@@ -21,19 +21,15 @@ export default async function PostDetail({ params }: Props) {
   const post: PostType = await res.json();
   if (!post) return <div>Loading...</div>;
 
-  // image_url の "" を除去
-  const cleanImageUrl = post.image_url?.replace(/^"(.*)"$/, "$1");
-  console.log(cleanImageUrl);
-
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{post.title}</h1>
       <div className={styles.date}>{post.created_at}</div>
-      {cleanImageUrl && (
+      {post.image_url && (
         <Image
-          src={cleanImageUrl}
+          src={post.image_url}
           alt={post.title}
-          width={500} // 適切な幅を指定
+          width={450} // 適切な幅を指定
           height={450} // 適切な高さを指定
         />
       )}
