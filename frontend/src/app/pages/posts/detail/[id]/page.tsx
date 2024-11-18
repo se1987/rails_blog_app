@@ -29,7 +29,7 @@ export default async function PostDetail({ params }: Props) {
         <Image
           src={post.image_url}
           alt={post.title}
-          width={450} // 適切な幅を指定
+          width={550} // 適切な幅を指定
           height={450} // 適切な高さを指定
         />
       )}
