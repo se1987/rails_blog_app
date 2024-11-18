@@ -47,10 +47,10 @@ const EditPost = ({ params }: EditPostProps) => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
+      formData.append("post[title]", title);
+      formData.append("post[content]", content);
       if (image) {
-        formData.append("image", image);
+        formData.append("post[image]", image);
       }
       await axios.put(`http://localhost:3001/api/v1/posts/${id}`, formData, {
         headers: {
