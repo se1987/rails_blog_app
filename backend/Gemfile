@@ -34,7 +34,10 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   # RSpecのインストール
   gem 'rspec-rails', '~> 5.0'
+  # FactoryBot初期化
+  gem 'factory_bot_rails'
 
+  gem "faker"
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
