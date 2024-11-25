@@ -3,5 +3,5 @@ class Post < ApplicationRecord
   has_one_attached :image
   # バリデーション
   validates :title, presence: true
-  validates :content, length: { minimum: 10 }
+  validates :content, presence: true, length: { minimum: 10 }
 end
